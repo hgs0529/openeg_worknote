@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { IRegiUserResult, regiUser } from "../api";
 
 interface IForm {
   username: string;
@@ -18,6 +21,7 @@ const Title = styled.h2`
   font-size: 36px;
   font-weight: 700;
   margin-bottom: 30px;
+  width: 300px;
 `;
 
 const Input = styled.input`
@@ -34,9 +38,15 @@ const Input = styled.input`
 `;
 
 function Regi() {
+  let output = localStorage.getItem("userid");
+  let localData = JSON.parse(output as any);
+  const navigate = useNavigate();
+  if (localData) {
+    navigate(`/worknote/${localData}`);
+  }
   const { register, handleSubmit } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    console.log(data);
+    navigate(`/worknote/${data}`);
   };
   return (
     <Wrapper>

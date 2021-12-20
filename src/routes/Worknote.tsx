@@ -1,4 +1,6 @@
+import { useQuery } from "react-query";
 import styled from "styled-components";
+import { IRegiUserResult, regiUser } from "../api";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -13,6 +15,7 @@ const Title = styled.h2`
   font-size: 36px;
   font-weight: 700;
   margin-bottom: 30px;
+  width: 300px;
 `;
 
 const Input = styled.input`
@@ -29,10 +32,17 @@ const Input = styled.input`
 `;
 
 function Worknote() {
+  let output = localStorage.getItem("userid");
+  let localData = JSON.parse(output as any);
+  const { data, isLoading } = useQuery<IRegiUserResult>(
+    "regi",
+    () => data ? regiUser(data) : ""
+  );
+  
   return (
     <Wrapper>
       <Title>출퇴근 관리</Title>
-      <Input readOnly />
+      <Input value={localData} readOnly />
     </Wrapper>
   );
 }
