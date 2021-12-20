@@ -1,14 +1,19 @@
 import axios from "axios";
 
-const BASE_PATH = 'http://localhost:3000'
+const BASE_PATH = 'http://localhost:8090'
 
 export interface IRegiUserResult {
   msg: string;
 }
 
-export function regiUser(userid: IRegiUserResult) {
-  return axios.get(`${BASE_PATH}/regi&userid=${userid}`).then(
-    (resp) => resp
+export interface IForm {
+  username: string;
+  userid: string;
+}
+
+export function regiUser(username: string | undefined) {
+  return axios.post(`${BASE_PATH}/regi`, { worker: username }).then(
+    (resp) => resp.data
   )
   .catch(function (error) {
     console.log(error);

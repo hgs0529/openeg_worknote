@@ -32,17 +32,12 @@ const Input = styled.input`
 `;
 
 function Worknote() {
-  let output = localStorage.getItem("userid");
-  let localData = JSON.parse(output as any);
-  const { data, isLoading } = useQuery<IRegiUserResult>(
-    "regi",
-    () => data ? regiUser(data) : ""
-  );
+  
   
   return (
     <Wrapper>
       <Title>출퇴근 관리</Title>
-      <Input value={localData} readOnly />
+      <Input readOnly />
     </Wrapper>
   );
 }

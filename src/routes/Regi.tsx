@@ -2,11 +2,10 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
-import { IRegiUserResult, regiUser } from "../api";
+import { IForm, IRegiUserResult, regiUser } from "../api";
+import { useEffect, useState } from "react";
 
-interface IForm {
-  username: string;
-}
+
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -38,16 +37,30 @@ const Input = styled.input`
 `;
 
 function Regi() {
-  let output = localStorage.getItem("userid");
-  let localData = JSON.parse(output as any);
   const navigate = useNavigate();
-  if (localData) {
-    navigate(`/worknote/${localData}`);
+  let output = localStorage.getItem("userid");
+  if (output) {
+    navigate(`/worknote`);
   }
   const { register, handleSubmit } = useForm<IForm>();
+  const [username, setUsername] = useState("");
+  const { data: userData, isLoading, refetch } = useQuery(
+    "regi",
+    () => regiUser(username),
+    { enabled: false }
+  );
   const onValid = (data: IForm) => {
-    navigate(`/worknote/${data}`);
+    setUsername(data.username);
+    if (userData) {
+      localStorage.setItem("userid", userData);
+      navigate(`/worknote`);
+    }
   };
+  useEffect(() => {
+    if (!output) {
+      refetch();
+    }
+  }, [username]);
   return (
     <Wrapper>
       <Title>사원명 등록</Title>
